@@ -43,3 +43,50 @@ const zerocho = {
 };
 
 console.log(zerocho.name.last);
+
+// ---------------------------------------------------------------
+// [4장] 1분 퀴즈 1
+// 다음 코드의 console.log 결과를 맞춰보세요.
+console.log('\n\n[4장] Quiz 1. console.log 결과는?')
+
+const hof = (a) => (b) => (c) => {
+    return a + (b * c);
+};
+const first = hof(3);
+const second = first(4);
+const third = second(5);
+console.log(third);    // 23
+console.log('console.log(third)의 결과는 23 입니다.')
+
+// 1분 퀴즈 2
+// 다음 if문의 중첩을 줄여보세요
+console.log('\n\nQuiz 2. if문 중첩 줄이기');
+
+function test() {
+    let result = '';
+    if (a) {
+        if (!b) {
+            result = 'c';
+        }
+    } else {
+        result = 'a';
+    }
+    result += 'b';
+    return result;
+}
+
+function test1() {
+    let result = '';
+    if (!a) {
+        result = 'a';
+        result += 'b';
+        return result;
+    } else {
+        if (!b) {
+            result = 'c';
+        }
+        result += 'b';
+        return result;
+    }
+}
+
