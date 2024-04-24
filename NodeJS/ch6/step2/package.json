@@ -1,7 +1,7 @@
 {
   "name": "learn-express",
   "version": "1.0.0",
-  "description": "learning express",
+  "description": "learning express step2",
   "main": "app.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
