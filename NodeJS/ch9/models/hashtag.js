@@ -14,7 +14,7 @@ class Hashtag extends Sequelize.Model {
             underscored: false,
             modelName: 'Hashtag',
             tableName: 'hashtags',
-            paranoid: false,
+            paranoid: true,
             charset: 'utf8mb4',
             collate: 'utf8mb4_general_ci',
         });

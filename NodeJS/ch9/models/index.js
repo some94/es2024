@@ -11,7 +11,7 @@ const sequelize = new Sequelize(
 
 db.sequelize = sequelize;
 
-const basename = path.basename(__filename);
+const basename = path.basename(__filename);   // index.js
 fs.readdirSync(__dirname)   // 현재 폴더의 모든 파일을 조회
   .filter(file => {   // 숨김 파일, index.js, js 확장자가 아닌 파일 필터링
     return (file.indexOf('.') !== 0) && (file !== basename) && (file.slice(-3) === '.js');
