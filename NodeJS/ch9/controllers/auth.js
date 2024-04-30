@@ -15,10 +15,10 @@ exports.join = async (req, res, next) => {
             nick,
             password: hash,
         });
-        return res.redirect('/');       // 302
-    } catch (err) {
-        console.error(err);
-        return next(err);
+        return res.redirect('/');
+    } catch (error) {
+        console.error(error);
+        return next(error);
     }
 }
 
@@ -29,7 +29,7 @@ exports.login = (req, res, next) => {
             return next(authError);
         }
         if (!user) {
-            return res.direct(`/?error=${info.message}`);
+            return res.redirect(`/?error=${info.message}`);
         }
         return req.login(user, (loginError) => {
             if (loginError) {
@@ -38,7 +38,7 @@ exports.login = (req, res, next) => {
             }
             return res.redirect('/');
         });
-    }) (req, res, next);    // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙인다.
+    })(req, res, next); // 미들웨어 내의 미들웨어에는 (req, res, next)를 붙입니다.
 };
 
 exports.logout = (req, res) => {
