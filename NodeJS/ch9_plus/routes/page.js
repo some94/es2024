@@ -8,6 +8,7 @@ router.use((req, res, next) => {
     res.locals.follwerCount = 0;
     res.locals.follwingCount = 0;
     res.locals.follwingIdList = [];
+    next();
 })
 
 router.get('/', renderMain);
