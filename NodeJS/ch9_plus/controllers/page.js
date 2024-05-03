@@ -1,9 +1,22 @@
-exports.renderMain = (req, res) => {
-    const twits = [];
-    res.render('main', {
-        title: 'NodeBird Plus',
-        twits,
-    })
+const { User, Post } = require('../models');
+
+exports.renderMain = async (req, res, next) => {
+  try {
+      const posts = await Post.findAll({
+          include: {
+              model: User,
+              attributes: ['id', 'nick'],
+          },
+          order: [['createdAt', 'DESC']],
+      });
+      res.render('main', {
+          title: 'NodeBird_Plus',
+          twits: posts,
+      });
+  } catch (err) {
+      console.error(err);
+      next(err);
+  }
 };
 
 exports.renderJoin = (req, res) => {
