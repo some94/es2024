@@ -1,6 +1,7 @@
 const passport = require('passport');
 const bcrypt = require('bcrypt');
 const User = require('../models/user');
+let { removeUserFromCache } = require('../passport/userCache');
 
 exports.join = async (req, res, next) => {
     const { email, nick, password } = req.body;
@@ -42,6 +43,7 @@ exports.login = async (req, res, next) => {
 };
 
 exports.logout = async (req, res, next) => {
+    removeUserFromCache(req.user.id);
     req.logout(() => {
         res.redirect('/');
     });
