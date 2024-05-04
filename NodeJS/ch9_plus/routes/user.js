@@ -4,6 +4,6 @@ const {follow} = require('../controllers/user');
 
 const router = express.Router();
 
-router.post(':/id/follow', isLoggedIn, follow);
+router.post('/:id/follow', isLoggedIn, follow);
 
 module.exports = router;
