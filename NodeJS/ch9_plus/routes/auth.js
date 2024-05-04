@@ -7,7 +7,7 @@ const { join, login, logout } = require('../controllers/auth');
 const router = express.Router();
 
 router.post('/join', isNotLoggedIn, join);
-router.post('login', isNotLoggedIn, login);
+router.post('/login', isNotLoggedIn, login);
 router.get('/logout', isLoggedIn, logout);
 
 router.get('/kakao', passport.authenticate('kakao'));
