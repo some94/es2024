@@ -7,6 +7,6 @@ const router = express.Router();
 router.post('/:id/follow', isLoggedIn, follow);
 router.post('/:id/unfollow', isLoggedIn, unfollow);
 
-router.post('/updateNick', isLoggedIn, updateNick);
+router.post('/update/nick', isLoggedIn, updateNick);
 
 module.exports = router;
