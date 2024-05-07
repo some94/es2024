@@ -29,6 +29,7 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
 .input-group input { width: 70%; }
 .half { float: left; width: 50%; margin: 10px 0; }
 #join { float: right; }
+#update-password { float: right; }
 .profile-wrap {
     width: 100%;
     display: inline-block;
