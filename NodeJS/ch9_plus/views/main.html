@@ -41,7 +41,7 @@
             <div class="twit-img"><img src="{{twit.img}}" alt="섬네일"></div>
             {% endif %}
             {% set index = loop.index0 %}
-            {% if user and not likes[index].includes(user.id) or not user%}
+            {% if not likes[index].includes(user.id)%}
             <button class="twit-like">좋아요 {{ likes[index].length }}</button>
             {% elif user and likes[index].includes(user.id) %}
             <button class="twit-unlike">좋아요 취소 {{ likes[index].length }}</button>
