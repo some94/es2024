@@ -16,6 +16,7 @@ exports.renderMain = async (req, res, next) => {
       res.render('main', {
           title: 'NodeBird_Plus',
           twits: posts,
+          likes: posts.map((v) => v.Liker.map((v) => v.id)),
       });
   } catch (err) {
       console.error(err);
