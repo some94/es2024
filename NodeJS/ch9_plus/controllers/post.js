@@ -29,3 +29,29 @@ exports.uploadPost = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.like = async (req, res, next) => {
+    try {
+        const post = await Post.findOne({ where: { id: req.params.id } });
+        if (!post) return res.status(404).send('No Post');
+
+        await post.addLiker(req.user.id);
+        res.send('success');
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+};
+
+exports.unlike = async (req, res, next) => {
+    try {
+        const post = await Post.findOne({ where: { id: req.params.id } });
+        if (!post) return res.status(404).send('No Post');
+
+        await post.removeLiker(req.user.id);
+        res.send('success');
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+};
