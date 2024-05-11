@@ -90,8 +90,13 @@ input[type='text'], input[type='email'], input[type='password'], textarea {
     position: relative;
     margin-bottom: 10px;
 }
-.twit-author { display: inline-block; font-weight: bold; margin-right: 10px; }
-.twit-follow, .twit-unfollow, .twit-like, .twit-unlike {
+.twit-author { display: inline-block; font-weight: bold; margin-right: 5px; }
+.twit-delete {
+    position: absolute;
+    top: 7px;
+    right: 7px;
+}
+.twit-follow, .twit-unfollow, .twit-like, .twit-unlike, .twit-delete {
     padding: 1px 5px;
     background: #fff;
     border: 1px solid silver;

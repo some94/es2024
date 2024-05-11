@@ -55,3 +55,16 @@ exports.unlike = async (req, res, next) => {
         next(err);
     }
 };
+
+exports.deletePost = async (req, res, next) => {
+    try {
+        const post = await Post.findOne({ where: { id: req.params.id } });
+        if (!post) return res.status(404).send('No Post');
+
+        await Post.destroy({ where: { id: req.params.id, userId: req.user.id } });
+        res.send('success');
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+}
