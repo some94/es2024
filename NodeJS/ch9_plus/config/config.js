@@ -8,7 +8,7 @@ module.exports = {
     "database": env.MYSQL_DATABASE,
     "host": env.MYSQL_HOST,
     "dialect": "mysql",
-    "operatorsAliases": false
+    "operatorsAliases": 0
   },
   "test": {
     "username": "root",
