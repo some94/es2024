@@ -1,4 +1,4 @@
-const { Post, Hashtag } = require("../models");
+const { Post, Hashtag, sequelize } = require("../models");
 
 exports.afterUploadImage = (req, res) => {
     console.log(req.file);
@@ -61,10 +61,25 @@ exports.deletePost = async (req, res, next) => {
         const post = await Post.findOne({ where: { id: req.params.id } });
         if (!post) return res.status(404).send('No Post');
 
+        const postHashtags = await sequelize.models.PostHashtag.findAll({
+            where: { PostId: post.id },
+        });
+
+        for (const postHashtag of postHashtags) {
+            const hashtagId = postHashtag.HashtagId;
+            const postsCount = await sequelize.models.PostHashtag.count({
+                where: { HashtagId: hashtagId },
+            });
+
+            if (postsCount === 1) {
+                await Hashtag.destroy({ where: { id: hashtagId } });
+            }
+        }
+
         await Post.destroy({ where: { id: req.params.id, userId: req.user.id } });
         res.send('success');
     } catch (err) {
         console.error(err);
         next(err);
     }
-}
+};
