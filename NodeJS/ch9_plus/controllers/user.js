@@ -1,5 +1,5 @@
 const bcrypt = require('bcrypt');
-const User = require('../models/user');
+const { User, Post, sequelize } = require('../models');
 let { userCache } = require('../passport/userCache');
 
 exports.renderPassword = (req, res) => {
@@ -9,8 +9,10 @@ exports.renderPassword = (req, res) => {
 exports.follow = async (req, res, next) => {
     try {
         const user = await User.findOne({ where: { id: req.user.id } });
+        const followingUser = await User.findOne({ where: { id: parseInt(req.params.id, 10) } });
         if (user) {
             await user.addFollowing(parseInt(req.params.id, 10));
+            userCache[req.user.id].Followings.push(followingUser);
             res.send('success');
         } else {
             res.status(404).send('No User');
@@ -26,6 +28,7 @@ exports.unfollow = async (req, res, next) => {
         const user = await User.findOne({ where: { id: req.user.id } });
         if (user) {
             await user.removeFollowing(parseInt(req.params.id, 10));
+            userCache[req.user.id].Followings = userCache[req.user.id].Followings.filter(f => f.id !== parseInt(req.params.id, 10));
             res.send('success');
         } else {
             res.status(404).send('No User');
