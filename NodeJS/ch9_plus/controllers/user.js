@@ -80,3 +80,33 @@ exports.updatePassword = async(req, res, next) => {
         next(err);
     }
 };
+
+exports.userPost = async (req, res, next) => {
+    try {
+        const userProfile = await User.findOne({ where: { id: req.params.id } });
+        const userFollowingCount = await sequelize.models.Follow.count({ where: { followerId: req.params.id } });
+        const userFollowerCount = await sequelize.models.Follow.count({ where: { followingId: req.params.id } });
+        const userPosts = await Post.findAll ({
+            where: { userId: req.params.id },
+            include: [{
+                model: User,
+                attributes: ['id', 'nick'],
+            }, {
+                model: User,
+                attributes: ['id', 'nick'],
+                as: 'Liker',
+            }],
+            order: [['createdAt', 'DESC']],
+        });
+        res.render('userPost', {
+            userProfile,
+            userFollowingCount,
+            userFollowerCount,
+            userPosts,
+            likes: userPosts.map((v) => v.Liker.map((v) => v.id)),
+        });
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+}

@@ -1,0 +1,114 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+<div class="timeline">
+    <div class="intro-profile">
+        <div class="intro-name">
+            <span class="intro-nick">{{ userProfile.nick }}님의 프로필</span>
+        </div>
+        <div class="intro-half">
+            <div>팔로잉</div>
+            <div class="count following-count">{{userFollowingCount}}</div>
+        </div>
+        <div class="intro-half">
+            <div>팔로워</div>
+            <div class="count follower-count">{{userFollowerCount}}</div>
+        </div>
+    </div>
+    <div class="user-twits">
+        <form id="hashtag-form" action="/hashtag">
+            <input type="text" name="hashtag" placeholder="태그 검색">
+            <button class="btn">검색</button>
+        </form>
+        {% for post in userPosts %}
+        <div class="twit">
+            <input type="hidden" value="{{ post.User.id }}" class="post-user-id">
+            <input type="hidden" value="{{ post.id }}" class="post-id">
+            <div class="author">{{ post.User.nick }}</div>
+            {% if post.User.id === user.id %}
+            <button class="twit-delete">글 삭제</button>
+            {% endif %}
+            <div class="twit-content">{{ post.content }}</div>
+            {% if post.img %}
+            <div class="twit-img"><img src="{{ post.img }}" alt="섬네일"></div>
+            {% endif %}
+            {% set index = loop.index0 %}
+            {% if not likes[index].includes(user.id)%}
+            <button class="twit-like">좋아요 {{ likes[index].length }}</button>
+            {% elif user and likes[index].includes(user.id) %}
+            <button class="twit-unlike">좋아요 취소 {{ likes[index].length }}</button>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
+</div>
+{% endblock %}
+
+{% block script %}
+<script>
+    if (document.getElementById('img')) {
+        document.getElementById('img').addEventListener('change', function(e) {
+            const formData = new FormData();
+            console.log(this, this.files);
+            formData.append('img', this.files[0]);
+            axios.post('/post/img', formData)
+                .then((res) => {
+                    document.getElementById('img-url').value = res.data.url;
+                    document.getElementById('img-preview').src = res.data.url;
+                    document.getElementById('img-preview').style.display = 'inline';
+                })
+                .catch((err) => {
+                    console.error(err);
+                });
+        });
+    }
+    document.querySelectorAll('.twit-like').forEach(function(tag) {
+        tag.addEventListener('click', function() {
+            const myId = document.querySelector('#my-id');
+            const twitId = tag.parentNode.querySelector('.post-id').value;
+            if (myId) {
+                axios.post(`/post/${twitId}/like`)
+                    .then(() => {
+                        location.reload();
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    })
+            }
+        });
+    });
+    document.querySelectorAll('.twit-unlike').forEach(function(tag) {
+        tag.addEventListener('click', function() {
+            const myId = document.querySelector('#my-id');
+            const twitId = tag.parentNode.querySelector('.post-id').value;
+            if (myId) {
+                axios.delete(`/post/${twitId}/unlike`)
+                    .then(() => {
+                        location.reload();
+                    })
+                    .catch((err) => {
+                        console.error(err);
+                    })
+            }
+        });
+    });
+    document.querySelectorAll('.twit-delete').forEach(function(tag) {
+        tag.addEventListener('click', function() {
+            const myId = document.querySelector('#my-id');
+            const userId = tag.parentNode.querySelector('.post-user-id').value;
+            const twitId = tag.parentNode.querySelector('.post-id').value;
+            if (myId.value === userId) {
+                if (confirm('게시글을 삭제하시겠습니까?')) {
+                    axios.delete(`/post/${twitId}`)
+                        .then(() => {
+                            location.reload();
+                        })
+                        .catch((err) => {
+                            console.error(err);
+                        })
+                }
+            }
+        });
+    });
+</script>
+{% endblock %}
