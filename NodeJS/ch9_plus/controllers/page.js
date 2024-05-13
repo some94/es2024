@@ -42,12 +42,22 @@ exports.renderHashtag = async (req,res, next) => {
         let posts = [];
 
         if (hashtag) {
-            posts = await hashtag.getPosts({ include: [{ model: User }] });
+            posts = await hashtag.getPosts({ include: [{
+                    model: User,
+                    attributes: ['id', 'nick'],
+                }, {
+                    model: User,
+                    attributes: ['id', 'nick'],
+                    as: 'Liker',
+                }],
+                order: [['createdAt', 'DESC']],
+            });
         }
 
         return res.render('main', {
             title: `${query} | NodeBird Plus`,
             twits: posts,
+            likes: posts.map((v) => v.Liker ? v.Liker.map((v) => v.id) : []),
         });
     } catch (err) {
         console.error(err);
