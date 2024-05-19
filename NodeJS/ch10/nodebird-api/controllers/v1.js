@@ -1,6 +1,6 @@
 const { User, Domain, Post, Hashtag } = require('../models');
 const jwt = require('jsonwebtoken');
-
+// JWT 생성
 exports.createToken = async (req, res) => {
     const { clientSecret } = req.body;
     try {
@@ -37,11 +37,11 @@ exports.createToken = async (req, res) => {
         })
     }
 };
-
+// 토큰 테스트(토큰 정보 출력)
 exports.tokenTest = async (req, res) => {
     res.json(res.locals.decoded);
 };
-
+// API 서버에 로그인 한 유저 게시글 불러오기
 exports.getMyPosts = async (req, res) => {
     try {
         const posts = await Post.findAll({ where: { userId: res.locals.decoded.id } });
@@ -62,7 +62,7 @@ exports.getMyPosts = async (req, res) => {
         })
     }
 };
-
+// API 서버에서 해시태그 검색하기
 exports.getPostsByHashtag = async (req, res) => {
   try {
       const hashtag = await Hashtag.findOne({ where: { title: req.params.title } });

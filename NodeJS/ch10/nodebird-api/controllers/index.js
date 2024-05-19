@@ -1,6 +1,6 @@
 const { User, Domain } = require('../models');
 const { v4: uuidv4 } = require('uuid');
-
+// API 서버 로그인
 exports.renderLogin = async (req, res, next) => {
     try {
         const user = await User.findOne({
@@ -18,7 +18,7 @@ exports.renderLogin = async (req, res, next) => {
         next(err);
     }
 };
-
+// 도메인 생성
 exports.createDomain = async (req, res, next) => {
     try {
         await Domain.create({

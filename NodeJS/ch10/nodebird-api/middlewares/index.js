@@ -16,7 +16,7 @@ exports.isNotLoggedIn = (req, res, next) => {
         res.redirect(`/?error=${message}`);     // localhost:8001?error=메시지
     }
 };
-
+// JWT 유효성 검사
 exports.verifyToken = (req, res, next) => {
     try {
         res.locals.decoded = jwt.verify(req.headers.authorization, process.env.JWT_SECRET);
