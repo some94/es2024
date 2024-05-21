@@ -4,12 +4,10 @@ const { createToken, tokenTest, getMyPosts, getPostsByHashtag } = require('../co
 
 const router = express.Router();
 
-router.use(apiLimiter);
+router.post('/token', apiLimiter, createToken);
+router.get('/test', verifyToken, apiLimiter, tokenTest);
 
-router.post('/token', createToken);
-router.get('/test', verifyToken, tokenTest);    // req.body.clientSecret
-
-router.get('/posts/my', verifyToken, getMyPosts);
-router.get('/posts/hashtag/:title', verifyToken, getPostsByHashtag);
+router.get('/posts/my', verifyToken, apiLimiter, getMyPosts);
+router.get('/posts/hashtag/:title', verifyToken, apiLimiter, getPostsByHashtag);
 
 module.exports = router;
