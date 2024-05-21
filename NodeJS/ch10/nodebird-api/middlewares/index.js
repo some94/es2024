@@ -1,4 +1,6 @@
 const jwt = require('jsonwebtoken');
+const rateLimit = require('express-rate-limit');
+const User = require('../models/user');
 
 exports.isLoggedIn = (req, res, next) => {
     if (req.isAuthenticated()) {    // passport 통해서 로그인 했니
@@ -33,4 +35,45 @@ exports.verifyToken = (req, res, next) => {
             message: '유효하지 않은 토큰입니다',
         });
     }
+};
+// API 사용량 제한
+// exports.apiLimiter = rateLimit({
+//     windowMs: 60 * 1000, // 1분
+//     max: 10,
+//     handler(req, res) {
+//         res.status(this.statusCode).json({
+//             code: this.statusCode, // 기본값 429
+//             message: '1분에 열 번만 요청할 수 있습니다.',
+//         });
+//     },
+// });
+
+const limiter = rateLimit({
+    windowMs: 60 * 1000,
+    max: (req, res) => {
+        if (req.user?.Domains[0]?.type === 'premium') { return 10 }
+        return 1;
+    },
+    handler(req, res) {
+        res.status(this.statusCode).json({
+            code: this.statusCode,
+            message: `1분에 ${req.user?.Domains[0]?.type === 'premium' ? '열' : '한'} 번만 요청할 수 있습니다.`,
+        });
+    },
+});
+
+exports.apiLimiter = async (req, res, next) => {
+    let user;
+    if (res.locals.decoded) {
+        user = await User.findOne({ where: { id: res.locals.decoded.id } });
+    }
+    req.user = user;
+    limiter(req, res, next);
+}
+// 사용하면 안 되는 라우터(이전 버전 등)에 붙여서 경고
+exports.deprecated = (req, res) => {
+    res.status(410).json({
+        code: 410,
+        message: '새로운 버전이 나왔습니다. 새로운 버전을 사용하세요.',
+    });
 };

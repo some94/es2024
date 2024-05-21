@@ -1,10 +1,10 @@
 const express = require('express');
-const { verifyToken, deprecated } = require('../middlewares');
-const { createToken, tokenTest, getMyPosts, getPostsByHashtag } = require('../controllers/v1');
+const { verifyToken, apiLimiter } = require('../middlewares');
+const { createToken, tokenTest, getMyPosts, getPostsByHashtag } = require('../controllers/v2');
 
 const router = express.Router();
 
-router.use(deprecated);
+router.use(apiLimiter);
 
 router.post('/token', createToken);
 router.get('/test', verifyToken, tokenTest);    // req.body.clientSecret

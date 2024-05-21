@@ -20,7 +20,7 @@ const request = async (req, api) => {
             delete req.session.jwt;     // 기존 토큰을 삭제하고
             return request(req, api);   // 재발급 요청
         }
-        throw err.response;
+        return err.response;
     }
 };
 // 로그인 한 유저가 작성한 게시글 불러오기
