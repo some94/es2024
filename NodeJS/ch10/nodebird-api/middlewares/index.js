@@ -1,6 +1,6 @@
 const jwt = require('jsonwebtoken');
 const rateLimit = require('express-rate-limit');
-const User = require('../models/user');
+const { User, Domain }  = require('../models');
 
 exports.isLoggedIn = (req, res, next) => {
     if (req.isAuthenticated()) {    // passport 통해서 로그인 했니
@@ -51,7 +51,7 @@ exports.verifyToken = (req, res, next) => {
 const limiter = rateLimit({
     windowMs: 60 * 1000,
     max: (req, res) => {
-        if (req.user?.Domains[0]?.type === 'premium') { return 10 }
+        if (req.user?.Domains[0]?.type === 'premium') { return 10; }
         return 1;
     },
     handler(req, res) {
@@ -65,7 +65,10 @@ const limiter = rateLimit({
 exports.apiLimiter = async (req, res, next) => {
     let user;
     if (res.locals.decoded) {
-        user = await User.findOne({ where: { id: res.locals.decoded.id } });
+        user = await User.findOne({
+            where: { id: res.locals.decoded.id },
+            include: { model: Domain }
+        });
     }
     req.user = user;
     limiter(req, res, next);
