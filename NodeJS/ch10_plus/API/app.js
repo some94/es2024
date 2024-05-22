@@ -8,6 +8,7 @@ const dotenv = require('dotenv');
 const passport = require('passport');
 
 dotenv.config();
+const indexRouter = require('./routes');
 const authRouter = require('./routes/auth');
 
 const { sequelize } = require('./models');
@@ -46,6 +47,7 @@ app.use(session({
 app.use(passport.initialize());     // req.user, req.login, req.isAuthenticate, req.logout 생성
 app.use(passport.session());      // connect.sid 라는 이름으로 세션 쿠기가 브라우저로 전송
 
+app.use('/', indexRouter);
 app.use('/auth', authRouter);
 
 app.use((req, res, next) => {
