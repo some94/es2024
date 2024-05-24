@@ -6,6 +6,7 @@ const nunjucks = require('nunjucks');
 const dotenv = require('dotenv');
 
 dotenv.config();
+const indexRouter = require('./routes');
 const app = express();
 
 app.set('port', process.env.PORT || 4081);
@@ -28,6 +29,7 @@ app.use(session({
     },
 }));
 
+app.use('/', indexRouter);
 
 app.use((req, res, next) => {
     const error = new Error(`${req.method} ${req.url} 라우터가 없습니다.`);
