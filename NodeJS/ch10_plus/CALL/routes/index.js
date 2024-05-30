@@ -1,5 +1,5 @@
 const express = require('express');
-const { test, getMyPosts, searchByHashtag } = require('../controllers');
+const { test, getMyPosts, searchByHashtag, renderMain } = require('../controllers');
 
 const router = express.Router();
 
@@ -7,5 +7,6 @@ const router = express.Router();
 
 router.get('/myposts', getMyPosts);
 router.get('/search/:hashtag', searchByHashtag);
+router.get('/', renderMain);
 
 module.exports = router;
