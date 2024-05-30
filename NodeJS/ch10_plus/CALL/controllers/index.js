@@ -52,7 +52,32 @@ exports.searchByHashtag = async (req, res, next) => {
 };
 
 exports.renderMain = (req, res) => {
-    res.render('main', { ke: process.env.CLIENT_SECRET });
+    res.render('main', {
+        url: process.env.API_URL,
+        key : process.env.CLIENT_SECRET
+    });
+};
+
+// 팔로잉 목록 가져오기
+exports.getMyFollowing = async (req, res, next) => {
+    try {
+        const result = await request(req, '/following/my');
+        res.json(result.data);
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
+};
+
+// 팔로워 목록 가져오기
+exports.getMyFollower = async (req, res, next) => {
+    try {
+        const result = await request(req, '/follower/my');
+        res.json(result.data);
+    } catch (err) {
+        console.error(err);
+        next(err);
+    }
 };
 
 /*
