@@ -14,6 +14,10 @@ class Domain extends Sequelize.Model {
             clientSecret: {
                 type: Sequelize.UUID,
                 allowNull: false,
+            },
+            browserSecret: {
+                type: Sequelize.UUID,
+                allowNull: false,
             }
         }, {
             sequelize,

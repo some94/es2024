@@ -54,7 +54,7 @@ exports.searchByHashtag = async (req, res, next) => {
 exports.renderMain = (req, res) => {
     res.render('main', {
         url: process.env.API_URL,
-        key : process.env.CLIENT_SECRET
+        key : process.env.BROWSER_SECRET,
     });
 };
 
