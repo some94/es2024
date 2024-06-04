@@ -1,9 +1,11 @@
 const { User, Domain, Post, Hashtag } = require('../models');
 const jwt = require('jsonwebtoken');
+const path = require('path');
+require('dotenv').config({ path: path.resolve(__dirname, '../../CALL/.env') });
 
 // JWT 생성
 exports.createToken = async (req, res) => {
-    const { browserSecret } = req.body;
+    const { browserSecret = 'defaultBrowserSecret', clientSecret = 'defaultClientSecret' } = req.body;
     try {
         const requestDomain = await Domain.findOne({
             where: { browserSecret },
@@ -13,7 +15,22 @@ exports.createToken = async (req, res) => {
             }]
         });
 
-        const { clientSecret } = process.env.CLIENT_SECRET;
+        const envClientSecret = process.env.CLIENT_SECRET;
+
+        if (requestDomain && requestDomain.clientSecret === envClientSecret) {
+            const token = jwt.sign({
+                id: requestDomain.User.id,
+                nick: requestDomain.User.nick,
+            }, process.env.JWT_SECRET, {
+                expiresIn: '10m',    // 유효기간
+                issuer: 'nodebird',     // 발급자
+            });
+            return res.json({
+                code: 200,
+                message: '토근이 발급되었습니다.',
+                token,
+            })
+        }
 
         const domain = await Domain.findOne({
             where: { clientSecret },
@@ -23,14 +40,14 @@ exports.createToken = async (req, res) => {
             }]
         });
 
-        if (!requestDomain || !domain) {
+        if (!requestDomain && !domain) {
             return res.status(401).json({
                 code: 401,
                 message: '등록되지 않은 도메인입니다. 먼저 도메인을 등록하세요.'
             })
         }
 
-        if (requestDomain === domain) {
+        if (!requestDomain && domain) {
             const token = jwt.sign({
                 id: domain.User.id,
                 nick: domain.User.nick,
@@ -42,11 +59,6 @@ exports.createToken = async (req, res) => {
                 code: 200,
                 message: '토근이 발급되었습니다.',
                 token,
-            })
-        } else {
-            return res.status(404).json({
-                code: 404,
-                message: 'KEY ERROR: 요청 유저가 일치하지 않습니다.',
             })
         }
     } catch (err) {
