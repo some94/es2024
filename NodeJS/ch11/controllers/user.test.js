@@ -1,4 +1,4 @@
-jest.mock('../models/user');
+jest.mock('../services/user');
 const { follow } = require('./user');
 const { follow: followService } = require('../services/user');
 

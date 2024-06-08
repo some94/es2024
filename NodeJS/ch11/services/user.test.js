@@ -3,7 +3,7 @@ const User = require('../models/user');
 const { follow } = require('./user');
 
 describe('follow', () => {
-    test('사용자를 찾아 팔로잉을 추가하고 success를 응답해야 함', async () => {
+    test('사용자를 찾아 팔로잉을 추가하고 ok를 반환함', async () => {
         User.findOne.mockReturnValue({
             addFollowing(id) {
                 return Promise.resolve(true);
@@ -19,7 +19,7 @@ describe('follow', () => {
         expect(result).toEqual('no user');
     });
 
-    test('DB에서 에러가 발생하면 throw', async () => {
+    test('DB 에서 에러가 발생하면 throw', async () => {
         const message = 'DB 에러';
         User.findOne.mockReturnValue(Promise.reject(message));
         try {
