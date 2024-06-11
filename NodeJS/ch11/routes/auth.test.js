@@ -88,15 +88,13 @@ describe('POST /login', () => {
 
 describe('GET /logout', () => {
     test('로그인 되어있지 않으면 403', (done) => {
-        request(app)
-            .get('/auth/logout')
+        request(app).get('/auth/logout')
             .expect(403, done);
     });
 
     const agent = request.agent(app);
     beforeEach((done) => {
-        agent
-            .post('/auth/login')
+        agent.post('/auth/login')
             .send({
                 email: 'ehdgnl0904@naver.com',
                 password: 'Tlzmflt4180!',
@@ -105,9 +103,8 @@ describe('GET /logout', () => {
     });
 
     test('로그아웃 수행', (done) => {
-        agent
-            .get('/auth/logout')
-            .expect('Location', `/`)
+        agent.get('/auth/logout')
+            .expect('Location', '/')
             .expect(302, done);
     });
 });
